@@ -52,7 +52,15 @@
         - not stat_result.stat.exists
         - download
 
-    - name: Cluster install
-      shell: |
-        ./openshift-install --dir install create cluster
-      when: install|bool
+    - block:
+      - name: Cluster install
+        shell: |
+          ./openshift-install --dir install create cluster
+        when: install|bool
+        register: install_log
+
+      rescue:
+
+      - name: Show log
+        debug:
+          msg: "{{ install_log.stderr }}"

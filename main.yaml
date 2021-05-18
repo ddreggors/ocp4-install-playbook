@@ -54,5 +54,5 @@
 
     - name: Cluster install
       shell: |
-        ./openshift-install-bad --dir install create cluster
+        ./openshift-install --dir install create cluster
       when: install|bool

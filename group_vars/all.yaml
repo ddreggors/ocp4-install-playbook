@@ -1,0 +1,24 @@
+ocp_release: "4.7.9"
+local_reg: "nexus.teklocal.net"
+local_repo: "ocp4/openshift4"
+ocp_repo: "openshift-release-dev"
+pull_secret_path: "/home/ddreggors/Projects/OpenShift/pull-secret-with-nexus.txt"
+release_name: "ocp-release"
+arch: "x86_64"
+install_path: "./install"
+ocp_baseDomain: "teklocal.net"
+ocp_worker_replicas: 2
+ocp_master_replicas: 3
+ocp_cluster: "ocp4"
+ocp_apiVIP: "192.168.4.120"
+ocp_ingressVIP: "192.168.4.121"
+vcsa_cluster: "home-lab"
+vcsa_datacenter: "home-dc"
+vcsa_defaultDatastore: "datastore2"
+vcsa_network: "VM Network"
+vcsa_username: "administrator@teklocal.net"
+vcsa_url: "vcsa.teklocal.net"
+ocp_imageContentSources:
+  nexus.teklocal.net/ocp4/openshift4:
+    - quay.io/openshift-release-dev/ocp-release
+    - quay.io/openshift-release-dev/ocp-v4.0-art-dev

@@ -1,4 +1,4 @@
-ocp_release: "4.7.9"
+ocp_release: "4.8.4"
 local_reg: "nexus.teklocal.net"
 local_repo: "ocp4/openshift4"
 ocp_repo: "openshift-release-dev"

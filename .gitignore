@@ -1,2 +1,2 @@
 openshift-install
-install*
+install-config.yaml

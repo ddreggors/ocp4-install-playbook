@@ -1,6 +1,6 @@
 vault --version
 vault status
-vault login s.t6Nto9SE4F5hJzzWWpCjYa85
+vault login <LOGIN TOKEN>
 vault operator unseal
 
 vault secrets list
@@ -8,10 +8,10 @@ vault secrets list -detailed
 vault kv list identity/
 vault kv list secret/
 
-vault kv put secret/ocp4/ca-bundle cert=@/home/ddreggors/ssl/intermediate/certs/star.teklocal.net-ca-chain-bundle.pem
-vault kv put secret/ocp4/sshKey key=@/home/ddreggors/.ssh/id_rsa.pub
-vault kv put secret/ocp4/pullSecret auths=@/home/ddreggors/Projects/OpenShift/pull-secret-with-nexus.txt
-vault kv put secret/ocp4/vcsa_password pass=Myp@ssw0rd
+vault kv put secret/ocp4/ca-bundle cert=@<PATH TO CA FILE>
+vault kv put secret/ocp4/sshKey key=@<PATH TO SSH KEY>
+vault kv put secret/ocp4/pullSecret auths=@<PATH TO PULL SECRET>
+vault kv put secret/ocp4/vcsa_password pass=<PASS>
 
 vault kv get -format=json secret/ocp4/ca-bundle
 vault kv get -format=json secret/ocp4/ca-bundle|jq -r '.data.cert'

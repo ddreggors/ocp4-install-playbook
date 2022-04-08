@@ -1,0 +1,51 @@
+apiVersion: v1
+baseDomain: {{ ocp_baseDomain }}
+compute:
+- architecture: amd64
+  hyperthreading: Enabled
+  name: worker
+  platform: {}
+  replicas: {{ ocp_worker_replicas }}
+controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
+  name: master
+  platform: {}
+  replicas: {{ ocp_master_replicas }}
+metadata:
+  creationTimestamp: null
+  name: {{ ocp_cluster }}
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  vsphere:
+    apiVIP: {{ ocp_apiVIP }}
+    cluster: {{ vcsa_cluster }}
+    datacenter: {{ vcsa_datacenter }}
+    defaultDatastore: {{ vcsa_defaultDatastore }}
+    ingressVIP: {{ ocp_ingressVIP }}
+    network: {{ vcsa_network }}
+    password: {{ vcsa_password }}
+    username: {{ vcsa_username }}
+    vCenter: {{ vcsa_url }}
+publish: External
+pullSecret: '{{ pullSecret|trim }}'
+sshKey: |
+{{ sshKey| indent( width=2, indentfirst=True) }}
+additionalTrustBundle: |
+{{ additionalTrustBundle| indent( width=2, indentfirst=True) }}
+imageContentSources:
+{% for reg, repos in ocp_imageContentSources.items() %}
+{% for repo in repos %}
+- mirrors:
+  - {{ reg }}
+  source: {{ repo }}
+{% endfor %}
+{% endfor %}

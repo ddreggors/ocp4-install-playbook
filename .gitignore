@@ -1,2 +1,3 @@
 openshift-install
 install-config.yaml
+pull-secret.txt

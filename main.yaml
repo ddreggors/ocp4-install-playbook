@@ -1,14 +1,12 @@
+
 ---
 - hosts: localhost
   vars:
+    # Defaults can be added here, and overridden in group_vars
     clean_install_dir: true
     mirror_repo: false
     download: true
     install: false
-    additionalTrustBundle: "{{ lookup('hashi_vault', 'secret=secret/ocp4/ca-bundle:cert token={{ vtoken }} url=http://provisioner.teklocal.net:8200').replace('\\n', '\n') }}"
-    sshKey: "{{ lookup('hashi_vault', 'secret=secret/ocp4/sshKey:key token={{ vtoken }} url=http://provisioner.teklocal.net:8200').replace('\\n', '\n') }}"
-    pullSecret: "{{ lookup('hashi_vault', 'secret=secret/ocp4/pullSecret:auths token={{ vtoken }} url=http://provisioner.teklocal.net:8200')|string }}"
-    vcsa_password: "{{ lookup('hashi_vault', 'secret=secret/ocp4/vcsa_password:pass token={{ vtoken }} url=http://provisioner.teklocal.net:8200') }}"
 
   tasks:
     - name: Remove old install dir if it exists
@@ -32,7 +30,6 @@
       template:
         src: "templates/install-config.yaml.j2"
         dest: "{{ install_path }}/install-config.yaml"
-      with_dict: "{{ocp_imageContentSources}}"
 
     - name: Get release into local repo
       shell: |
@@ -43,20 +40,26 @@
       stat:
         path: openshift-install
       register: stat_result
-      when: download
 
     - name: Download binary for install
       shell: |
-        oc adm release extract -a {{ pull_secret_path }} --command=openshift-install "{{ local_reg }}/{{ local_repo }}:{{ ocp_release }}-{{arch }}"
-      when: 
-        - not stat_result.stat.exists
-        - download
+        curl -ksL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ ocp_release }}/openshift-install-linux-{{ ocp_release }}.tar.gz -o -| tar -xzf - openshift-install
+      when:
+        - not stat_result.stat.exists and download|bool
 
     - block:
-      - name: Cluster install
+      - name: Cluster install (Downloaded binary)
         shell: |
           ./openshift-install --dir install create cluster
-        when: install|bool
+        when:
+          - install|bool and not stat_result.stat.exists
+        register: install_log
+
+      - name: Cluster install (Binary in-path)
+        shell: |
+          openshift-install --dir install create cluster
+        when:
+          - install|bool and stat_result.stat.exists
         register: install_log
 
       rescue:

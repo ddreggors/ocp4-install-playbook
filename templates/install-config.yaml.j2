@@ -36,12 +36,16 @@ platform:
     username: {{ vcsa_username }}
     vCenter: {{ vcsa_url }}
 publish: External
-pullSecret: '{{ pullSecret|trim }}'
+pullSecret: |
+{{ pullSecret| indent( width=2, first=True) }}
 sshKey: |
-{{ sshKey| indent( width=2, indentfirst=True) }}
+{{ sshKey| indent( width=2, first=True)| string }}
+{% if additionalTrustBundle is defined %}
 additionalTrustBundle: |
-{{ additionalTrustBundle| indent( width=2, indentfirst=True) }}
+{{ additionalTrustBundle| indent( width=2, first=True) }}
+{% endif %}
 imageContentSources:
+{% if ocp_imageContentSources is defined %}
 {% for reg, repos in ocp_imageContentSources.items() %}
 {% for repo in repos %}
 - mirrors:
@@ -49,3 +53,4 @@ imageContentSources:
   source: {{ repo }}
 {% endfor %}
 {% endfor %}
+{% endif %}

@@ -13,7 +13,6 @@ This playbook aims to be a complete installer that uses hashicorp vault to store
 | mirror_repo       | false         |
 | download          | true          |
 | install           | false         |
-| vtoken            |               |
 
 
 ## Running the playbook
@@ -21,8 +20,8 @@ This playbook aims to be a complete installer that uses hashicorp vault to store
 
 To just create the install config and not run the install:
 
-`ansible-playbook ./main.yaml -e vtoken=<your vault token>`
+`ansible-playbook ./main.yaml`
 
 or to create the install config, do not attempt to check or download the installer (already downloaded) and proceed with install:
 
-`ansible-playbook ./main.yaml -e vtoken=<your vault token> -e download=false -e download=false`
+`ansible-playbook ./main.yaml -e download=false -e install=false`

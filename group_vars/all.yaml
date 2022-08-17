@@ -1,24 +1,33 @@
-ocp_release: "4.8.4"
-local_reg: "nexus.teklocal.net"
+sshKey: my-super-secret-sshKey
+pull_secret_path: "{{ playbook_dir }}/pull-secret.txt"
+pullSecret: "{{ lookup('file', pull_secret_path)|string }}"
+vcsa_password: "my-super-secret-vcsa_password"
+# additionalTrustBundle: Add additionalTrustBundle here if required
+## OR USE VAULT
+# additionalTrustBundle: "{{ lookup('hashi_vault', 'secret=secret/ocp4/ca-bundle:cert token={{ vtoken }} url=http://vault.local.net:8200').replace('\\n', '\n') }}"
+# sshKey: "{{ lookup('hashi_vault', 'secret=secret/ocp4/sshKey:key token={{ vtoken }} url=http://vault.local.net:8200').replace('\\n', '\n') }}"
+# pullSecret: "{{ lookup('hashi_vault', 'secret=secret/ocp4/pullSecret:auths token={{ vtoken }} url=http://vault.local.net:8200')|string }}"
+# vcsa_password: "{{ lookup('hashi_vault', 'secret=secret/ocp4/vcsa_password:pass token={{ vtoken }} url=http://vault.local.net:8200') }}"
+ocp_release: "4.10.26"
+local_reg: "nexus.local.net"
 local_repo: "ocp4/openshift4"
 ocp_repo: "openshift-release-dev"
-pull_secret_path: "/home/ddreggors/Projects/OpenShift/pull-secret-with-nexus.txt"
 release_name: "ocp-release"
 arch: "x86_64"
 install_path: "./install"
-ocp_baseDomain: "teklocal.net"
-ocp_worker_replicas: 2
+ocp_baseDomain: "local.net"
+ocp_worker_replicas: 3
 ocp_master_replicas: 3
 ocp_cluster: "ocp4"
-ocp_apiVIP: "192.168.4.120"
-ocp_ingressVIP: "192.168.4.121"
-vcsa_cluster: "home-lab"
-vcsa_datacenter: "home-dc"
-vcsa_defaultDatastore: "datastore2"
+ocp_apiVIP: "192.168.1.100"
+ocp_ingressVIP: "192.168.1.101"
+vcsa_cluster: "local-cluster"
+vcsa_datacenter: "local-dc"
+vcsa_defaultDatastore: "datastore1"
 vcsa_network: "VM Network"
-vcsa_username: "administrator@teklocal.net"
-vcsa_url: "vcsa.teklocal.net"
+vcsa_username: "administrator@local.net"
+vcsa_url: "vcsa.local.net"
 ocp_imageContentSources:
-  nexus.teklocal.net/ocp4/openshift4:
+  nexus.local.net/ocp4/openshift4:
     - quay.io/openshift-release-dev/ocp-release
     - quay.io/openshift-release-dev/ocp-v4.0-art-dev
